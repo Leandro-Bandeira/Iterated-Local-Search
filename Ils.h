@@ -49,6 +49,9 @@ class Ils {
 		bool bestImprovement2Opt(Solucao *s, int **custos); // Tenta melhoramento pela tecnica 2opt, troca dos vertices não adjacentes e inverte o caminho
 		double calculate2OptCost(Solucao *s, int, int, int**custos); // Calcula o custo de 2opt
 
+		bool bestImprovementOrOpt(Solucao *s, int quantiaVertices , int **custos); // Metodo reinsertion, or-opt2, or-opt3
+		double calculateOrOptCost(Solucao *s, int, int, int quantiaVertices, int**custos); // Calcula o custo de inserção
+
 		void buscaLocal(Solucao *s, int **custos);
 
 	private:

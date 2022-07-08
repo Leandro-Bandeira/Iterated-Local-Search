@@ -2,6 +2,8 @@
 #include "Leitor.h"
 #include <vector>
 #include "Ils.h"
+#include <ios>
+#include <limits>
 
 
 
@@ -27,7 +29,8 @@ int main() {
 	Solucao s; // Solucao do sistema
 
 	ils.construcao(&s,dimensao, custos);
-
+	
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
 	ils.buscaLocal(&s, custos);
 	for(int i = 0; i < s.sequencia.size(); i++) {
 			std::cout << s.sequencia[i] << " ";
