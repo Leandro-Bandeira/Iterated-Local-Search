@@ -301,6 +301,148 @@ void Ils::buscaLocal(Solucao *s, int **custos) {
 }
 
 
+// ALgoritmo responsável por realizar uma perturbação, vamos escolher aleatoriamente segmentos de tamanho 2 até V / 10 e trocar as posições
+
+void Ils::perturbacao(Solucao *s) {
+	/* Gera numero aleatorio entre 2 e a dimensão do grafo */	
+	std::random_device rd;
+	
+	int limite;
+	if(s->sequencia.size() > 20) {
+	
+		limite = s->sequencia.size() / 10;
+	}
+	else {
+		limite = 2;
+	}
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dist(2, limite);
+	
+	/* Pega inicialmente os tamanhos aleatórios e a posicaoInicial do primeiro	*/
+	int tamanho1 =  dist(gen);
+	int tamanho2 = dist(gen);
+		
+	std::uniform_int_distribution <> dist1(1, s->sequencia.size() - 2 - tamanho1); // Podemos pegar qualquer posição
+	std::uniform_int_distribution <> dist2(1, s->sequencia.size() - 2 - tamanho2); // Garantimos que vamos pegar uma posição inicial que não estoure o programa
+
+	int posicaoInicial1 = dist1(gen);
+
+	/* Devemos então, garantir que a posicao inicial do 2, comece após a sequencia do primeiro	*/
+	int posicaoInicial2;
+	
+	while(1){
+
+		std::cout << "do while" << std::endl;	
+		posicaoInicial2 = dist2(gen);
+
+		if(posicaoInicial2 != posicaoInicial1 && (posicaoInicial2 > posicaoInicial1 + tamanho1 || posicaoInicial2 < posicaoInicial1 - tamanho2)) {
+			break;
+		}
+	}
+	
+	
+	std::vector < int > sequencia1;
+	std::vector < int > sequencia2;
+	int valor1, valor2;
+	
+	valor1 = s->sequencia[posicaoInicial1 - 1];
+	valor2 = s->sequencia[posicaoInicial2 - 1];
+	//int contador1 = tamanho1;
+	std::cout << "Posicoes" << std::endl;	
+	std::cout << posicaoInicial1 << std::endl;
+	std::cout << posicaoInicial2 << std::endl;
+
+	std::cout << "Sequencia Inicialmente:" << std::endl;
+	for(int i = 0; i < s->sequencia.size(); i++) {
+		std::cout << s->sequencia[i] << " ";
+	}	
+	std::cout << std::endl;
+	int contador1 = tamanho1;
+	while(contador1--)
+	{
+
+		sequencia1.push_back(s->sequencia[posicaoInicial1]);
+		s->sequencia.erase(s->sequencia.begin() + posicaoInicial1);
+	}
+	
+	int k = 0;
+	int contador = tamanho2;
+	for(int i = 0; i < s->sequencia.size() - 1; i++) 
+	{
+		if(valor2 == s->sequencia[i]) {
+			k = i + 1;
+			while(contador--) {
+				sequencia2.push_back(s->sequencia[k]);
+				s->sequencia.erase(s->sequencia.begin() + k);
+			}
+
+			break;
+		} 
+	}
+
+	std::cout << "valor1: " << valor1 << std::endl;
+	std::cout << "valor2: " << valor2 << std::endl;
+
+	std::cout << "Sequencias armazenadas: " << std::endl;
+	for(int i = 0; i < sequencia1.size(); i++) {
+		std::cout << sequencia1[i] << " ";
+	}
+	std::cout << std::endl;
+
+	for(int i = 0; i < sequencia2.size(); i++) {
+		std::cout << sequencia2[i] << " ";
+	}
+	std::cout << std::endl;
+	
+	int j = 0;
+	for(int i = 0; i < s->sequencia.size() - 1; i++) {
+
+		if(valor1 == s->sequencia[i]) {
+			k = i + 1;
+			while(tamanho2--) {
+
+				s->sequencia.insert(s->sequencia.begin() + k, sequencia2[j]);
+				k++;
+				j++;
+			}
+			j = 0;
+		}
+
+		if(valor2 == s->sequencia[i]) {
+			k = i + 1;
+
+			while(tamanho1--) {
+				s->sequencia.insert(s->sequencia.begin() + k, sequencia1[j]);
+				k++;
+				j++;
+			}
+			j = 0;
+		}
+	}
+
+	
+	for(int i = 0; i < s->sequencia.size(); i++) {
+
+		std::cout << s->sequencia[i] << " ";
+	}
+	std::cout << std::endl;
+	int repetidos = 0;
+	int valor;
+	for(int i = 1; i < s->sequencia.size() - 1; i++) {
+		for(int j = i + 1; j < s->sequencia.size() - 1; j++) {
+			if(s->sequencia[i] == s->sequencia[j]) {
+				repetidos++;
+				valor = s->sequencia[i];
+			}
+		}
+	}
+	std::cout << repetidos << std::endl;
+	std::cout << valor << std::endl;
+
+	
+}
+
+
 void Ils::ordenaEmOrdemCrescente(std::vector < InsertionInfo > &custoInsercao) {
 	
 	// Sort irá utilizar a função booleana para realizar a comparação de custos e deixar em ordem crescente

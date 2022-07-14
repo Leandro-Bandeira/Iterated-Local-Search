@@ -44,4 +44,18 @@ int main() {
 
 	std::cout << "valorobj: " << s.valorObj << std::endl;
 
+	ils.perturbacao(&s);
+	ils.buscaLocal(&s, custos);
+	s.valorObj = 0;
+
+	for(int i = 0; i < s.sequencia.size() ; i++) {
+		std::cout << s.sequencia[i] << " ";
+	}
+	std::cout << std::endl;
+	for(int i = 0; i < s.sequencia.size() - 1; i++) {
+		s.valorObj += custos[s.sequencia[i] - 1][s.sequencia[i + 1] - 1];
+	}
+
+	std::cout << "ValorObj: " << s.valorObj << std::endl;
+
 }

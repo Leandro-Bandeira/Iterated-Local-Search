@@ -15,11 +15,12 @@ int main() {
 
     std::vector < int > valores;
 
-    for(int i = 0 ; i < 3; i++) {
+    for(int i = 0 ; i < 10; i++) {
         valores.push_back(i);
     }
 
-    valores.insert(valores.begin() + 2, 2);
+    //0 1 2
+    valores.insert(valores.begin() + 3, 5);
 
     for(int i = 0; i < valores.size(); i++) {
 

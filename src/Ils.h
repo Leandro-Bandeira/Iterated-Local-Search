@@ -54,6 +54,8 @@ class Ils {
 
 		void buscaLocal(Solucao *s, int **custos);
 
+		void perturbacao(Solucao *s);
+
 	private:
 		
 		Solucao solucao;
