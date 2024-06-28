@@ -29,7 +29,12 @@ int main() {
 	Solucao s; // Solucao do sistema
 
 	ils.construcao(&s,dimensao, custos);
-	
+	int FO = 0;
+  for(int i = 0; i < s.sequencia.size() - 1; i++) {
+		FO += custos[s.sequencia[i] - 1][s.sequencia[i + 1] - 1];
+	}
+
+	std::cout << " FO APOS CONSTRUCAO: " << FO << std::endl;
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
 	ils.buscaLocal(&s, custos);
 	for(int i = 0; i < s.sequencia.size(); i++) {
