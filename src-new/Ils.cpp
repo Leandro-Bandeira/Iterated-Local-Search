@@ -1,9 +1,9 @@
 #include "Ils.h"
+#include "LocalSearch.h"
 #include <cstdlib>
 #include <random>
 #include<bits/stdc++.h>
 #include <algorithm>
-#include <functional>
 #include <iostream>
 
 Ils::Ils(int maxIter, int maxIterILS, double** costs, int n){
@@ -15,9 +15,11 @@ Ils::Ils(int maxIter, int maxIterILS, double** costs, int n){
 
 
 double Ils::algorithm(){
-  double obj = 0;
   greedyConstruction();
-  return obj;
+  
+  LocalSearch localSearch(m_costs, &m_bestSolution);
+  localSearch.algorithm();
+  return m_bestSolution.valueObj;
 }
 
 
@@ -51,52 +53,14 @@ void Ils::greedyConstruction() {
     });
     double alpha = (double) std::rand() / RAND_MAX;
     int indexChoosen = std::rand() %  ((int) std::ceil(alpha *allCosts.size()));
-    /* 
-    std::cout << "solucao antes da insercao: ";
-    for(auto k: initSolution.sequence){
-      std::cout << k << " ";
-    }
-    std::cout << "\n";
-    std::cout << "Nó escolhido para inserção: " << allCosts[indexChoosen].nodeChoosen << "\n";
-    std::cout << "Primeiro vértice de inserção: " << allCosts[indexChoosen].edgeRemoved << "\n";
-    */
     initSolution.sequence.insert(allCosts[indexChoosen].posInsertNode, allCosts[indexChoosen].nodeChoosen);
     
-    /*std::cout << "Solucao apos a insercao: ";
-   for(auto k : initSolution.sequence){
-      std::cout << k << " ";
-    }
-    std::cout << "\n";
-    
-    std::cout << "cl antes erase: ";
-    for(auto k : cl){
-      std::cout << k << " ";
-    }
-    std::cout << "\n";
-    */
+    initSolution.valueObj += allCosts[indexChoosen].insertionCost;
     cl.erase(allCosts[indexChoosen].posNodeCL);
-    //std::cout << "cl pos erase: ";
-    //for(auto k : cl){
-    //  std::cout << k << " ";
-    //}
-    //std::cout << "\n";
 
-    //getchar();
-  }
 
-  std::cout << "solucao inicial: ";
-  for(auto k: initSolution.sequence){
-    std::cout << k << " ";
   }
-    std::cout << "\n";
-  auto it = initSolution.sequence.begin();
-  for(int  a= 0; a < initSolution.sequence.size() - 1; a++){
-    int i = *it;
-    it = std::next(it, 1);
-    int j = *it;
-    initSolution.valueObj += m_costs[i][j];
-  }
-    std::cout << "FO: " << initSolution.valueObj << "\n";
+  m_bestSolution = initSolution;
 }
 
 /* Calcula os custos de inserção para o algoritmo de inserção mais barata */ 
@@ -142,11 +106,22 @@ void Ils::randomizedSolution(Solution *s, std::vector<bool>& nodesInserted) {
     auto it = std::next(s->sequence.begin(), pos);
     nodesInserted[nodes[pos]] = true;
     s->sequence.insert(it, nodes[pos]);
+    
+    if(pos == 0){
+      s->valueObj += m_costs[0][nodes[pos]];
+    }else{
+      s->valueObj += m_costs[nodes[pos - 1]][nodes[pos]];
+    }
     pos++;
   }
   s->sequence.push_front(0);
   s->sequence.push_back(0);
+  s->valueObj += m_costs[nodes[pos-1]][0];
+
+
 }
+
+
 
 
 

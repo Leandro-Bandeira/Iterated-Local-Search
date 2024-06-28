@@ -1,5 +1,4 @@
 #include <iostream>
-#include "Leitor.h"
 #include <vector>
 #include "Ils.h"
 #include <ios>
