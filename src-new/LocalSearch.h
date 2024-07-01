@@ -6,7 +6,7 @@ class LocalSearch{
   public:
     LocalSearch(double** costs, Solution* s);
     bool bestImprovementSwap();
-    double calculateSwapCosts(int i, int j);
+    bool bestImprovement2Opt();
     void algorithm();
   private:
     double** m_costs;
