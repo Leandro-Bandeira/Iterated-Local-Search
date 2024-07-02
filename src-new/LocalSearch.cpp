@@ -11,9 +11,26 @@ LocalSearch::LocalSearch(double** costs, Solution* s){
 
 
 void LocalSearch::algorithm(){
-  std::vector<int> NL = {1, 2};
+  std::vector<int> NL = {1, 2, 3};
   bool improved = false;
   
+  /* verificar novamente ao apagar */
+  std::list<int> teste = {1, 2, 3, 4, 5, 6, 1};
+  std::list<int>::iterator ta = (std::next(teste.begin(), 2));
+  std::list < int>::iterator tb =(std::next(teste.begin(), 1));
+  
+
+
+  int value = *ta;
+
+  teste.insert(tb, value);
+
+  teste.erase(ta);
+  for(int k: teste){
+    std::cout << k << " ";
+  }
+  getchar();
+
   while(!NL.empty()){
     int n = std::rand() % NL.size();
 
@@ -24,10 +41,14 @@ void LocalSearch::algorithm(){
       case 2:
         improved = bestImprovement2Opt();
         break;
+      case 3:
+        improved = bestImprovementOrOpt(1);
+        break;
+      
     }
 
     if(improved){
-      NL = {1, 2};
+      NL = {1, 2, 3};
     }
     else{
       NL.erase(NL.begin() + n);
@@ -155,4 +176,116 @@ bool LocalSearch::bestImprovement2Opt(){
 
   return false;
 
+}
+
+/* A função reinsertion, Or-opt2,Or-opt3
+  * São similares.
+  * No reinsertion devemos pegar um elemento e mudar sua posição
+  * dessa forma:
+  * 1 2 3 4 5 6 1
+  * Se temos i  = 1, podemos colocá-lo em qualquer posição 
+  * Então para j  = 5, temos:
+  * 1 2 3 4 5 6 1 
+  * 1 3 4 5 6 2 1 
+  * Então a ideia é, coloca na posição e depois exclui a posição anterior 
+  * O calculo do custo para o reinsertion é dado pela seguinte maneira: (novo - antigo)
+  * para i < j 
+  * c[i-1][i+1] +  c[j][i] + c[j + 1][i] - c[i-1][i] - c[i][i+1] - c[j][j+1]
+  * se i > j, temos o seguinte exemplo:
+  * 1 2 3 4 5 6 1// i = 5 e j = 1 
+  * 1 6 2 3 4 5 1 
+  * c[i-1][j] + c[j][i] + c[j-1][j+1] - c[i-1][i] - c[j][j+1] - c[j][j-1]
+  * caso eles forem adjacente 
+  * ou seja v_i_next = v_j
+  * 1 2 3 4 5 6 1 // i = 2 e j = 3
+  * 1 3 2 4 5 6 1
+  * c[i-1][j] + c[i][j+1] - c[i-1][i] - c[j][j+1]
+  * se eles forem adjacentes e i > j 
+  * 1 2 3 4 5 6 1 // i = 5 e j = 4 
+  * 1 2 3 4 6 5 1
+  * c[i][j-1] + c[j][i+1] - c[j][j-1] - c[i][i+1]*/ 
+bool LocalSearch::bestImprovementOrOpt(int count){
+  double bestDelta = 0;
+  
+   std::list<int>::iterator init = m_solution->sequence.begin();
+  std::list<int>::iterator best_i = init;
+  std::list<int>::iterator best_j = init;
+  int best_k = 0;
+  int best_l = 0;
+  std::list<int>::iterator end = m_solution->sequence.end();
+  int  k =0;
+  for(auto i = std::next(init, 1); *i != 0; ++i){
+    int v_i = *i;
+    int v_i_prev = *(std::prev(i, 1));
+    int v_i_next = *(std::next(i, 1));
+    int l = 0;
+    for(auto j = std::next(init, 1); *j != 0; ++j){
+      if (*i == *j){
+        continue;
+      }
+      int v_j = *j;
+      int v_j_next = *(std::next(j, 1));
+
+      double delta = 0;
+      if(k < l){
+        if(v_i_next  == v_j){ // caso em que são adjacentes
+          delta = m_costs[v_i_prev][v_j] + m_costs[v_i][v_j_next] - m_costs[v_i_prev][v_i] - m_costs[v_j][v_j_next];
+        }
+        else{
+          delta = m_costs[v_i_prev][v_i_next] + m_costs[v_j][v_i] + m_costs[v_j_next][v_i] - m_costs[v_i_prev][v_i]
+          -m_costs[v_i][v_i_next] - m_costs[v_j][v_j_next];
+        }
+      }else{
+        int v_j_prev = *(std::prev(j, 1));
+        if(v_j_next == v_i){
+          delta = m_costs[v_i][v_j_prev] + m_costs[v_j][v_i_next] - m_costs[v_j][v_j_prev] - m_costs[v_i][v_i_next];
+        }
+        else{
+          delta = m_costs[v_i_prev][v_j] + m_costs[v_j][v_i] + m_costs[v_j_prev][v_j_next] - m_costs[v_i_prev][v_i]
+          -m_costs[v_j][v_j_next] - m_costs[v_j][v_j_prev];
+        }
+      }
+      if(delta < bestDelta){
+        best_i = i;
+        best_j = j;
+        best_k  = k;
+        best_l = l;
+        bestDelta = delta;
+
+      }
+      
+      l++;
+    }
+    k++;
+  }
+
+  if(bestDelta < 0){
+    std::cout << "best_i: " << *best_i << " best_j: " << *best_j << "\n";
+    for(int k:m_solution->sequence)
+      std::cout << k << " ";
+    std::cout << "\n";
+    int value = *best_i;
+    if(best_k < best_l){
+      m_solution->sequence.erase(best_i);
+      m_solution->sequence.insert(std::next(best_j, 1), value);
+    }else{
+      if(best_l + 1 == best_k){
+        m_solution->sequence.insert(best_j, value);
+
+        m_solution->sequence.erase(best_i);
+      }else{
+        m_solution->sequence.insert(std::next(best_j, 1), value);
+        m_solution->sequence.erase(best_i);
+      }
+    }
+    m_solution->valueObj += bestDelta;
+    std::cout << "achou melhor\n";
+    for(int k:m_solution->sequence)
+      std::cout << k << " ";
+    std::cout << "\n";
+    //getchar();
+    return true;
+  }
+
+  return false;
 }
