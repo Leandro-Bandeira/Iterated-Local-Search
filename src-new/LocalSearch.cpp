@@ -11,26 +11,9 @@ LocalSearch::LocalSearch(double** costs, Solution* s){
 
 
 void LocalSearch::algorithm(){
-  std::vector<int> NL = {1, 2, 3};
+  std::vector<int> NL = {1, 2, 3, 4};
   bool improved = false;
   
-  /* verificar novamente ao apagar */
-  std::list<int> teste = {1, 2, 3, 4, 5, 6, 1};
-  std::list<int>::iterator ta = (std::next(teste.begin(), 2));
-  std::list < int>::iterator tb =(std::next(teste.begin(), 1));
-  
-
-
-  int value = *ta;
-
-  teste.insert(tb, value);
-
-  teste.erase(ta);
-  for(int k: teste){
-    std::cout << k << " ";
-  }
-  getchar();
-
   while(!NL.empty()){
     int n = std::rand() % NL.size();
 
@@ -42,19 +25,23 @@ void LocalSearch::algorithm(){
         improved = bestImprovement2Opt();
         break;
       case 3:
-        improved = bestImprovementOrOpt(1);
+        improved = bestImprovementOrOpt();
+        break;
+      case 4:
+        improved = bestImprovementOrOpt2();
         break;
       
     }
 
     if(improved){
-      NL = {1, 2, 3};
+      NL = {1, 2, 3, 4};
     }
     else{
       NL.erase(NL.begin() + n);
     }
   }
   
+  /*
   std::cout << "solution antes dos moviments: ";
    for(auto k : m_solution->sequence)
     std::cout << k << " ";
@@ -77,6 +64,7 @@ void LocalSearch::algorithm(){
     FO += m_costs[i][j];
   }
   std::cout << "FO real: " << FO << "\n";
+ */ 
 }
 
 /* O algoritmo abaixo realiza o movimento swap
@@ -204,7 +192,7 @@ bool LocalSearch::bestImprovement2Opt(){
   * 1 2 3 4 5 6 1 // i = 5 e j = 4 
   * 1 2 3 4 6 5 1
   * c[i][j-1] + c[j][i+1] - c[j][j-1] - c[i][i+1]*/ 
-bool LocalSearch::bestImprovementOrOpt(int count){
+bool LocalSearch::bestImprovementOrOpt(){
   double bestDelta = 0;
   
    std::list<int>::iterator init = m_solution->sequence.begin();
@@ -213,14 +201,15 @@ bool LocalSearch::bestImprovementOrOpt(int count){
   int best_k = 0;
   int best_l = 0;
   std::list<int>::iterator end = m_solution->sequence.end();
-  int  k =0;
+  int  k =1;
   for(auto i = std::next(init, 1); *i != 0; ++i){
     int v_i = *i;
     int v_i_prev = *(std::prev(i, 1));
     int v_i_next = *(std::next(i, 1));
-    int l = 0;
+    int l = 1;
     for(auto j = std::next(init, 1); *j != 0; ++j){
-      if (*i == *j){
+      if (*i == *j){ 
+        l++;
         continue;
       }
       int v_j = *j;
@@ -260,11 +249,8 @@ bool LocalSearch::bestImprovementOrOpt(int count){
   }
 
   if(bestDelta < 0){
-    std::cout << "best_i: " << *best_i << " best_j: " << *best_j << "\n";
-    for(int k:m_solution->sequence)
-      std::cout << k << " ";
-    std::cout << "\n";
     int value = *best_i;
+
     if(best_k < best_l){
       m_solution->sequence.erase(best_i);
       m_solution->sequence.insert(std::next(best_j, 1), value);
@@ -279,11 +265,129 @@ bool LocalSearch::bestImprovementOrOpt(int count){
       }
     }
     m_solution->valueObj += bestDelta;
-    std::cout << "achou melhor\n";
-    for(int k:m_solution->sequence)
-      std::cout << k << " ";
-    std::cout << "\n";
-    //getchar();
+    return true;
+  }
+
+  return false;
+}
+
+/* A função abaixo 
+ * é similar ao movimento de reinsertion, no entanto, no lugar de 
+ * pegar um único vértice, vamos pegar os dois consecutivos
+ * Exemplo para i  < j e  i = 1 e j = 5 
+ * 1 2 3 4 5 6 1
+ * 1 4 5 6 2 3 1
+ * O calculo do custo será dado por:
+ * c[i-1][i + 2] + c[j][i] + c[i+1][j+1] - c[i-1][i] - c[i+1][i+2] - c[j][j+1]
+ * caso que i < j e são adjancetes
+ * i = 3 e j = 5
+ * 1 2 3 (4 5) 6 1
+ * 1 2 3 6 (4 5) 1
+ * c[i-1][i+2] + c[j][i] + c[i+1][j+1] - c[i-1][i] - c[i+1][i+2] - c[j][j+1]
+ * Caso o i > j, ex i = 4 e j = 1 
+ * 1 2 3 4 5 6 1 
+ * 1 5 6 2 3 4 1
+ * c[j-1][i] + c[i+1][j] + c[i-1][i+2] - c[j-1][j] - c[i][i-1] - c[i+1][i+2]
+ * exemplo i = 3 e j = 1 
+ * 1 2 3 4 5 6 1
+ * 1 4 5 2 3 6 1
+ * caso eles sejam adjances e i > j, ou seja,  i = 3 e j = 2
+ * 1 2 3 (4 5) 6 1
+ * 1 2 4 5 3 6 1
+ * c[j-1][i] + c[i+1][j] + c[i-1][i+2] - c[j-1][j] -c[i-1][i] - c[i +1][i+2]*/
+bool LocalSearch::bestImprovementOrOpt2(){
+  
+  
+  int count = 2;
+  /* 
+  std::cout << "here\n";
+  std::list < int>teste = {1, 2, 3, 4, 5, 6, 1};
+  std::list<int>::iterator ta = std::next(teste.begin(), 3);
+  std::list<int>::iterator tb = std::next(teste.begin(), 1);
+  int a = 4;
+  int b = 5;
+  while(count > 0){
+    ta = teste.erase(ta);
+    if(count == 2)
+      tb = teste.insert(tb, a);
+    if(count == 1)
+      tb = teste.insert(std::next(tb, 1), b);
+    count--;
+  }
+
+   
+  for(auto k: teste)
+    std::cout << k << " ";
+  std::cout << "\n";
+
+  getchar();
+  */
+ 
+  std::list<int>::iterator init = m_solution->sequence.begin();
+  std::list<int>::iterator best_i = init;
+  std::list<int>::iterator best_j = init;
+  int best_k = 0;
+  int best_l = 0;
+  std::list<int>::iterator end = m_solution->sequence.end();
+  int  k =1;
+  double bestDelta = 0;
+  /* O valor de i so pode ir até o antepenultimo valor da sequencia*/
+  for(auto i = std::next(init,1); i != std::prev(end, 2); ++i){
+    int v_i = *i;
+    int v_i_prev = *(std::prev(i, 1));
+    int v_i_next = *(std::next(i, 1));
+    int v_i_nnext = *(std::next(i, 2));
+    int l = 1;
+    for(auto j = std::next(init, 1); *j != 0; ++j){
+      int v_j = *j;
+      int v_j_prev = *(std::prev(j, 1));
+      int v_j_next = *(std::next(j, 1));
+
+      /* if para evitar sobreposição */ 
+      if(v_i == v_j or v_i_next == v_j){
+        l++;
+        continue;
+      }
+      double delta = 0;
+      if(k<l){
+        delta = m_costs[v_i_prev][v_i_nnext] + m_costs[v_j][v_i] + m_costs[v_i_next][v_j_next]
+          -m_costs[v_i_prev][v_i] - m_costs[v_i_next][v_i_nnext] - m_costs[v_j][v_j_next];
+      }
+      else{
+        delta = m_costs[v_j_prev][v_i] + m_costs[v_i_next][v_j] + m_costs[v_i_prev][v_i_nnext]
+          - m_costs[v_j_prev][v_j] - m_costs[v_i][v_i_prev] - m_costs[v_i_next][v_i_nnext];
+      }
+      if(delta < bestDelta){
+        best_i = i;
+        best_j = j;
+        best_k = k;
+        best_l = l;
+        bestDelta = delta;
+      }
+      l++;
+    }
+    k++;
+  }
+
+  if(bestDelta < 0){
+    std::list<int>::iterator v_i_next = (std::next(best_i, 1));
+    int value1 = *best_i;
+    int value2 = *(std::next(best_i, 1));
+    int value = value1;
+    
+    if(best_k < best_l){
+      m_solution->sequence.erase(best_i);
+      m_solution->sequence.erase(v_i_next);
+      m_solution->sequence.insert(std::next(best_j, 1), value1);
+      m_solution->sequence.insert(std::next(best_j, 2), value2);
+
+    }else{
+      m_solution->sequence.insert(best_j, value1);
+      m_solution->sequence.insert(best_j, value2);
+      m_solution->sequence.erase(best_i);
+      m_solution->sequence.erase(v_i_next);
+    }
+    m_solution->valueObj += bestDelta;
     return true;
   }
 

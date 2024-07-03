@@ -15,11 +15,23 @@ Ils::Ils(int maxIter, int maxIterILS, double** costs, int n){
 
 
 double Ils::algorithm(){
-  greedyConstruction();
+  double bestAllSolution = 999999999;
+  for(int i = 0; i < m_maxIterILS; i++){
   
-  LocalSearch localSearch(m_costs, &m_bestSolution);
-  localSearch.algorithm();
-  return m_bestSolution.valueObj;
+    greedyConstruction();
+  
+    LocalSearch localSearch(m_costs, &m_bestSolution);
+    localSearch.algorithm();
+    
+    if(m_bestSolution.valueObj < bestAllSolution){
+      bestAllSolution = m_bestSolution.valueObj;
+    }
+    m_bestSolution.sequence.clear();
+    m_bestSolution.valueObj = 0;
+  }
+  
+  std::cout << "best FO: " << bestAllSolution << "\n";
+  return bestAllSolution;
 }
 
 
