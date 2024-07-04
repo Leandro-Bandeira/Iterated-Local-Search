@@ -9,6 +9,7 @@ class LocalSearch{
     bool bestImprovement2Opt();
     bool bestImprovementOrOpt();
     bool bestImprovementOrOpt2();
+    bool bestImprovementOrOpt3(); 
     void algorithm();
   private:
     double** m_costs;
