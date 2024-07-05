@@ -15,7 +15,9 @@ class Ils{
 		void randomizedSolution(Solution* s, std::vector<bool>& nodesInserted);
     void calculateCostInsertion(Solution*s, std::vector<InsertionInfo>& allCosts, std::list<int>& cl);
     void addNodeSolution(int edge);
-    void debug();	
+    void debug();
+    void perturbation();
+    bool overLap(std::list<int>::iterator pos_i, const int tam_i, std::list<int>::iterator pos_j, const int tam_j);
 	private:
 	double** m_costs;
     int m_n;
