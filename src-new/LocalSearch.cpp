@@ -13,10 +13,6 @@ LocalSearch::LocalSearch(double** costs, Solution* s){
 void LocalSearch::algorithm(){
   std::vector<int> NL = {1, 2, 3, 4, 5};
   bool improved = false;
-  //std::cout << "solution antes dos moviments: ";
-   //for(auto k : m_solution->sequence)
-    //std::cout << k << " ";
-  //std::cout << "\n";
   while(!NL.empty()){
     int n = std::rand() % NL.size();
 

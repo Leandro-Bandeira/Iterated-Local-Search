@@ -19,14 +19,12 @@ int main(int argc, char** argv) {
 	
   double** costs = data.getMatrixCost();
 
-	Ils ils(50, 50, costs, n); 
-
-  for(int i = 0; i < n; i++){
-    for(int j = 0; j < n; j++){
-      std::cout << costs[i][j] << " ";
-    }
-    std::cout << "\n";
+  int maxIter = 50;
+  int maxIterIls = n;
+  if (n >= 150){
+    maxIterIls = std::ceil((double)n/2);
   }
+	Ils ils(maxIter, maxIterIls, costs, n); 
   ils.algorithm();
 	
 
