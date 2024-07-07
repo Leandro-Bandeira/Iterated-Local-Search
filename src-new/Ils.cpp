@@ -14,50 +14,11 @@ Ils::Ils(int maxIter, int maxIterILS, double** costs, int n){
 };
 
 
-void Ils::debug(){
-  double FO = 0;
-  auto it = m_bestAllSolution.sequence.begin();
-  std::vector<int> occurrNodes(m_bestAllSolution.sequence.size()-1,0);
-  for(int a = 0; a < m_bestAllSolution.sequence.size() - 1 ; a++){
-    occurrNodes[a]++;
-    int i = *it;
-    it = std::next(it, 1);
-    int j = *it;
-    FO += m_costs[i][j];
-  }
-  if(FO == m_bestAllSolution.valueObj){
-    std::cout << "FO são iguais = " << FO << "\n";
-  }else{
-    std::cout << "As FO não batem\n" << "FO REAL: " << FO << "\n" << "FO MODELO: " << m_bestAllSolution.valueObj << "\n";
-  }
-
-  if(m_bestAllSolution.sequence.back() == 0){
-    occurrNodes[0]++;
-  }
-  bool occurNodesOnce = true;
-  for(int i = 0; i < occurrNodes.size(); i++){
-    if(i != 0){
-      if(occurrNodes[i] > 1 or occurrNodes[i] == 0){
-        std::cout << i << "\n";
-        occurNodesOnce = false;
-        break;
-      }
-    }
-  }
-  if(!occurNodesOnce){
-    std::cout << "algum vértice além do zero repetiu mais de uma vez ou tem vértice faltando\n";
-  }
-  else if(occurrNodes[0] == 2){
-    std::cout << "Todos os vértices apareceram uma vez e o zero duas vezes no inicio e fim\n";
-  }
-
-
-}
-double Ils::algorithm(){
+Solution Ils::algorithm(){
   
   m_bestAllSolution.valueObj = 999999999;
   m_best.valueObj = 999999999;
-
+  
   for(int i = 0; i < m_maxIter; i++){
   
     greedyConstruction(); /* atua sobre o m_bestSolution */
@@ -81,8 +42,9 @@ double Ils::algorithm(){
     }
   }
   
-  debug(); 
-  return m_bestAllSolution.valueObj;
+  
+  
+  return m_bestAllSolution;
 }
 
 

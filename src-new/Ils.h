@@ -9,12 +9,11 @@ class Ils{
 	
 	public:
 		Ils(int maxIter, int maxIterILS, double** costs, int n);
-    double algorithm();
+    Solution algorithm();
 		void greedyConstruction();
 		void randomizedSolution(Solution* s, std::vector<bool>& nodesInserted);
     void calculateCostInsertion(Solution*s, std::vector<InsertionInfo>& allCosts, std::list<int>& cl);
     void addNodeSolution(int edge);
-    void debug();
     Solution perturbation(Solution s);
     bool overLap(std::list<int>::iterator pos_i, const int tam_i, std::list<int>::iterator pos_j, const int tam_j);
 	private:
