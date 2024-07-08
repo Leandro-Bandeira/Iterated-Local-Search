@@ -7,6 +7,11 @@
 #include <chrono>
 
 
+/* Função responsável por realizar o debug da solução 
+ * O debug da solução é feito verificando se todas os vértices
+ * além do zero, apareceram uma única vez. Após isso, 
+ * basta verificar se o zero aparece apenas duas vezes, no inicio e no fim da rota
+ * . Por fim, verifica se a FO está calculada corretamente, caso sim, é porque a solução é viável*/
 bool debug(Solution* s, double** m_costs){
   bool feasible = true;
   double FO = 0;
@@ -70,9 +75,13 @@ int main(int argc, char** argv) {
   
   Solution bestSolution;
   bestSolution.valueObj = 9999999;
+  /* Loop de 10 iterações do algoritmo para tentar achar
+  * a melhor solução */
   auto start = std::chrono::high_resolution_clock::now();
   for(int i =0 ; i < 10; i++){
     Ils ils(maxIter, maxIterIls, costs, n);
+    
+    /* Chamada do algoritmo ILS*/
     Solution currentSolution = ils.algorithm();
     if(currentSolution.valueObj < bestSolution.valueObj){
       bestSolution = currentSolution;

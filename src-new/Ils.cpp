@@ -14,24 +14,31 @@ Ils::Ils(int maxIter, int maxIterILS, double** costs, int n){
 };
 
 
+/* A heurística ILS se resume da seguinte forma:
+ * -> Para toda iteração, criamos uma solução inicial de forma gulosa
+ * -> A partir da solução inicial, buscamos a melhor solução local, com o uso do algoritmo LocalSearch
+ * -> Após isso, pegamos a melhor solução e a perturbamos para tentar encontrar um ótimo global
+ * -> Por fim, apenas atualizamos a melhor solução e criamos outras soluções para encontrar valores melhores */
 Solution Ils::algorithm(){
   
   m_bestAllSolution.valueObj = 999999999;
   m_best.valueObj = 999999999;
   
   for(int i = 0; i < m_maxIter; i++){
-  
+    
+    /* Chamada do algoritmo guloso */
     greedyConstruction(); /* atua sobre o m_bestSolution */
   
     int iterIls = 0;
     while(iterIls <= m_maxIterILS){
-
+      /* Procura ótimos locais a partir da solução gulosa encontrada */
       LocalSearch localSearch(m_costs, &m_bestSolution);
       localSearch.algorithm();
       if(m_bestSolution.valueObj < m_best.valueObj){
         m_best  = m_bestSolution;
         iterIls = 0;
       }
+      /* Perturba o melhor ótimo local para tentar encontrar o ótimo global*/
       m_bestSolution = perturbation(m_best);
       iterIls++;
 
@@ -48,7 +55,14 @@ Solution Ils::algorithm(){
 }
 
 
-/* Método responsável pela construção gulosa */
+/* Método responsável pela construção gulosa 
+ * O algoritmo guloso possui as seguintes etapas:
+ * 1 -> Inicializa a solução com três vértices aleatórios
+ * 2 -> Cria um vetor de vértices candidatos a inserção
+ * 3 -> Ordena os vértices do menor para o maior custo de inserção na solução
+ * 4 -> Pega um index aleatório do vetor do item (3), tentando ao máxima conseguir o mais próximo de 0 ou 1
+ * 5 -> Adiciona o vértice na solução e retira do vetor de vértices candidatos
+ * 6 -> volta para o ponto (3) até que o vetor de candidatos esteja vazio */
 void Ils::greedyConstruction() {
   
   std::srand(std::time(0));
@@ -56,6 +70,7 @@ void Ils::greedyConstruction() {
   std::vector < bool > nodesInserted(m_n, false);
   Solution initSolution;
   initSolution.valueObj = 0;
+  /* Adiciona 3 vértices aleatórios na solução inicial */
   randomizedSolution(&initSolution, nodesInserted);
   
 
@@ -68,18 +83,22 @@ void Ils::greedyConstruction() {
       cl.push_back(i);
     }
   }
-    
+  /* Algoritmo da constução gulosa */
   while(!cl.empty()){
     std::vector < InsertionInfo > allCosts;
+    /* Calcula o custo de inserção para cada vértice em CL*/
     calculateCostInsertion(&initSolution, allCosts, cl);
+    /* Ordena o vértice de valor crescente do custo de inserção */
     std::sort(allCosts.begin(), allCosts.end(), [](const InsertionInfo& first,const InsertionInfo& second)
     {
       return first.insertionCost < second.insertionCost;
     });
+    /* Seleciona o vértice escolhido de forma aleatória */
     double alpha = (double) std::rand() / RAND_MAX;
     int indexChoosen = std::rand() %  ((int) std::ceil(alpha *allCosts.size()));
     initSolution.sequence.insert(allCosts[indexChoosen].posInsertNode, allCosts[indexChoosen].nodeChoosen);
     
+    /* Adiciona o vértice escolhido na solução e o retira de CL*/
     initSolution.valueObj += allCosts[indexChoosen].insertionCost;
     cl.erase(allCosts[indexChoosen].posNodeCL);
 
@@ -99,11 +118,13 @@ void Ils::calculateCostInsertion(Solution*s, std::vector<InsertionInfo>& allCost
   
   auto it = s->sequence.begin();
   
+  /* Percorre a sequencia e calcula todos os custos de inserção dos vértices de CL na solução */
   for(int a = 0; a < sequenceSize; a++){
     int i = *it;
     it = std::next(it, 1);
     int j = *it;
 
+    /* Perceba que é necessário salvar o iterator do vértice de CL, para apagá-lo em O(1) posteriormente*/
     for(std::list<int>::iterator k = cl.begin(); k != cl.end(); ++k){
       allCosts[l].insertionCost = m_costs[i][*k] + m_costs[j][*k] - m_costs[i][j];
       allCosts[l].nodeChoosen = *k;
@@ -126,6 +147,9 @@ void Ils::randomizedSolution(Solution *s, std::vector<bool>& nodesInserted) {
     nodes.push_back(i);
   }
 
+  /* Para pegar 3 valores aleatórios
+  *  ordenamos um vetor utilizando o algoritmo shuffle
+  * que ordena o vetor de forma aleatoria e retiramos os 3 primeiros elementos */
   std::shuffle(nodes.begin(), nodes.end(), gen);
   int pos = 0;
   while(pos < 3){
@@ -152,7 +176,8 @@ void Ils::randomizedSolution(Solution *s, std::vector<bool>& nodesInserted) {
 /* Função responsável por realizar o movimento de double bridge
   * como perturbação
   * O movimento de double bridge precisa de dois segmentos não sobrepostos
-  * de forma aleatória de tamanho 2 até v/10 */
+  * de forma aleatória de tamanho 2 até v/10 
+  * Para realizar seu movimento, basta trocar a posição dos dois segmentos */
 Solution Ils::perturbation(Solution s){
   std::random_device rd;
   std::mt19937 gen(rd());
@@ -166,7 +191,13 @@ Solution Ils::perturbation(Solution s){
   int tam_i = 0;
   int tam_j = 0;
   
-  
+  /* Algoritmo para calcular dois segmentos não sobrepostos. Para isso, devemos:
+   * calcular o tamanho do primeiro segmento, e por fim calcular a sua posição inicial
+   * perceba que para o cálculo da posição inicial leva em conta o tamanho
+   * para não haver estouro de memória, fazendo isso para o primeiro e para o segundo,
+   * devemos verificar se eles não são sobrepostos, para fazer essa verificação,
+   * vamos analisar se a posição de i é menor do que j, caso sim, vamos analisar se o primeiro elemento de j
+   * está no segmento de i, caso sim, é porque são sobrepostos. Fazemos o mesmo com j */
   while(1){
     tam_i = distTam(gen);
     std::uniform_int_distribution<> distPos_i(1, size - tam_i -1);
@@ -175,10 +206,6 @@ Solution Ils::perturbation(Solution s){
     std::uniform_int_distribution<>distPos_j(1, size - tam_j - 1);
     pos_j = distPos_j(gen);
     
-    /* Para verificar se dois segmentos são sobrepostos, basta pegar
-      * o indice do menor, somar seu indice com o seu tamanho - 1 
-      * e verificar se ele chega até a posição do maior
-      * somamos com tamanho - 1, pq no tamanho ele já está sendo contado */ 
     if(pos_i == pos_j){
       continue;
     }
@@ -203,9 +230,8 @@ Solution Ils::perturbation(Solution s){
   }
  
 
-   auto init = s.sequence.begin();
-  
-  
+  /* Salvando variáveis para calcular o custo */
+  auto init = s.sequence.begin();
   auto it_i = std::next(init, pos_i);
   int v_i = *(it_i);
   int v_i_next = *(std::next(it_i, tam_i));
@@ -220,7 +246,7 @@ Solution Ils::perturbation(Solution s){
   int v_j_last = *(std::next(it_j, tam_j - 1));
   
   /* Para realizar a troca, vamos identificar
-   * o iterator do elementot anterior, dos dois conjuntos,
+   * o iterator do elemento anterior, dos dois conjuntos,
    * remover os elementos e inserir nas posições invertidas */
   /* pos_i  == 1 e tam = 2, pos_j = 6 e tam =3
    * 1 (2 3) 4 5 6 (7 8 9) 1 */
@@ -252,12 +278,6 @@ Solution Ils::perturbation(Solution s){
     elements_j.push_back(*it_j);
     it_j = s.sequence.erase(it_j);
   }
-
-  //std::cout << "apos deletar:\n";
-  //for(auto k : m_bestSolution.sequence)
-   // std::cout << k << " ";
-  //std::cout << "\n";
-  
   
   double delta = 0;
   if(pos_i + tam_i == pos_j or pos_j + tam_j == pos_i){ /* Indica adjacencia */  

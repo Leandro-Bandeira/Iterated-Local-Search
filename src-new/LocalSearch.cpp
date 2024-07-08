@@ -10,6 +10,8 @@ LocalSearch::LocalSearch(double** costs, Solution* s){
 }
 
 
+/* Algoritmo RVND, selecionamos um algoritmo de forma aleatória
+ * e então aplicamos para determinar um ótimo melhor local, fazemos isso até não haver mais melhorias */
 void LocalSearch::algorithm(){
   std::vector<int> NL = {1, 2, 3, 4, 5};
   bool improved = false;
@@ -41,29 +43,6 @@ void LocalSearch::algorithm(){
       NL.erase(NL.begin() + n);
     }
   }
-  
-  
-  
-
-/*
-  std::cout << "solution  pos moviments: ";
-   for(auto k : m_solution->sequence)
-    std::cout << k << " ";
-  std::cout << "\n";
- 
-  std::cout << "FO calculado: " << m_solution->valueObj << "\n";
-  double FO = 0;
-  auto it = m_solution->sequence.begin();
-  for(int a = 0; a < m_solution->sequence.size() - 1 ; a++){
-    int i = *it;
-    it = std::next(it, 1);
-    int j = *it;
-    //std::cout  << i << "---" << j << ": " << m_costs[i][j] <<  "\n";
-    FO += m_costs[i][j];
-  }
-  
-  std::cout << "FO real: " << FO << "\n";
-  */
 }
 
 /* O algoritmo abaixo realiza o movimento swap
