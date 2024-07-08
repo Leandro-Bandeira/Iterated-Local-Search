@@ -7,7 +7,8 @@
 #include <chrono>
 
 
-void debug(Solution* s, double** m_costs){
+bool debug(Solution* s, double** m_costs){
+  bool feasible = true;
   double FO = 0;
   auto it = s->sequence.begin();
   std::vector<int> occurrNodes(s->sequence.size()-1,0);
@@ -19,9 +20,11 @@ void debug(Solution* s, double** m_costs){
     FO += m_costs[i][j];
   }
   if(FO == s->valueObj){
-    std::cout << "FO são iguais = " << FO << "\n";
+    //std::cout << "FO são iguais = " << FO << "\n";
+    feasible = true;
   }else{
-    std::cout << "As FO não batem\n" << "FO REAL: " << FO << "\n" << "FO MODELO: " << s->valueObj << "\n";
+    //std::cout << "As FO não batem\n" << "FO REAL: " << FO << "\n" << "FO MODELO: " << s->valueObj << "\n";
+    feasible = false;
   }
 
   if(s->sequence.back() == 0){
@@ -38,13 +41,15 @@ void debug(Solution* s, double** m_costs){
     }
   }
   if(!occurNodesOnce){
-    std::cout << "algum vértice além do zero repetiu mais de uma vez ou tem vértice faltando\n";
+    //std::cout << "algum vértice além do zero repetiu mais de uma vez ou tem vértice faltando\n";
+    feasible = false;
   }
   else if(occurrNodes[0] == 2){
-    std::cout << "Todos os vértices apareceram uma vez e o zero duas vezes no inicio e fim\n";
+    //std::cout << "Todos os vértices apareceram uma vez e o zero duas vezes no inicio e fim\n";
+    feasible = true;
   }
 
-
+  return feasible;
 }
 
 
@@ -75,10 +80,9 @@ int main(int argc, char** argv) {
   }
   auto end = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> duration = end - start;
-  std::cout << "O tempo de execução foi de " << (double)duration.count() / 10 << " segundos." << std::endl;
-  std::cout << "FO: " << bestSolution.valueObj << "\n";
-  debug(&bestSolution, costs);
+  bool feasible = debug(&bestSolution, costs);
 	
+  std::cout << bestSolution.valueObj << " " << (double)duration.count() / 10 << " " << feasible << "\n";
 	
 
 }
