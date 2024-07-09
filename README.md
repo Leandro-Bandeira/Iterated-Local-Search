@@ -16,17 +16,15 @@ chmod a+x execute.sh
 ```
 ### Results obtidos a partir de um processor I7 10 Geração, 15Gb RAM<br>
 
-As instâncias que estão em negrito, é porque foi encontrado um valor ótimo melhor que o material de referência. <br>
-
 <table border="1", align="center">
 <thead>
 <tr><th>Instancia</th><th> FO</th><th> Time</th><th> Feasible</th></tr>
 </thead>
 <tbody>
 <tr><td>a280.tsp</td><td> 2579</td><td> 38.4819</td><td> 1</td></tr>
-<tr><td><b>ali535.tsp</b></td><td> 202339</td><td> 504.167</td><td> 1</td></tr>
+<tr><td>ali535.tsp</td><td> 202339</td><td> 504.167</td><td> 1</td></tr>
 <tr><td>att48.tsp</td><td> 10628</td><td> 0.15991</td><td> 1</td></tr>
-<tr><td><b>att532.tsp</b></td><td> 27718</td><td> 466.084</td><td> 1</td></tr>
+<tr><td>att532.tsp</td><td> 27718</td><td> 466.084</td><td> 1</td></tr>
 <tr><td>bayg29.tsp</td><td> 1610</td><td> 0.0329733</td><td> 1</td></tr>
 <tr><td>bays29.tsp</td><td> 2020</td><td> 0.0329025</td><td> 1</td></tr>
 <tr><td>berlin52.tsp</td><td> 7542</td><td> 0.212121</td><td> 1</td></tr>
@@ -79,7 +77,7 @@ As instâncias que estão em negrito, é porque foi encontrado um valor ótimo m
 <tr><td>pr299.tsp</td><td> 48191</td><td> 52.3924</td><td> 1</td></tr>
 <tr><td>pr439.tsp</td><td> 107217</td><td> 215.27</td><td> 1</td></tr>
 <tr><td>pr76.tsp</td><td> 108159</td><td> 0.698321</td><td> 1</td></tr>
-<tr><td><b>rat195.tsp</b></td><td> 2323</td><td> 10.0136</td><td> 1</td></tr>
+<tr><td>rat195.tsp</td><td> 2323</td><td> 10.0136</td><td> 1</td></tr>
 <tr><td>rat99.tsp</td><td> 1211</td><td> 1.6022</td><td> 1</td></tr>
 <tr><td>rd100.tsp</td><td> 7910</td><td> 1.78623</td><td> 1</td></tr>
 <tr><td>rd400.tsp</td><td> 15287</td><td> 169.363</td><td> 1</td></tr>
