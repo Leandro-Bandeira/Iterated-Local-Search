@@ -10,7 +10,7 @@ LocalSearch::LocalSearch(double** costs, Solution* s){
 }
 
 
-/* Algoritmo RVND, selecionamos um algoritmo de forma aleatória
+/* Algoritmo RVND, selecionamos um algoritmo de vizinhança de forma aleatória
  * e então aplicamos para determinar um ótimo melhor local, fazemos isso até não haver mais melhorias */
 void LocalSearch::algorithm(){
   std::vector<int> NL = {1, 2, 3, 4, 5};
@@ -50,7 +50,7 @@ void LocalSearch::algorithm(){
  * 1 2 3 4 5 6 1 e estamos aplicando o swap entre i  = 1 e j = 4
  * logo teremos a nova rota dada por
  *  1 5 3 4 2 6 1
- *  Os calculos para da função objetivo estão descritos abaixo
+ *  Os calculos para a função objetivo estão descritos abaixo
  *  Para o calculo do custo no swap, se eles não forem adjacentes
  *  temos o seguinte (novo - antigo);
  *  c[v_j][v_i_prev] + c[v_j][v_i_next] + c[v_i][v_j_prev]+c[v_i][v_j_next] - c[v_i][v_i_prev]

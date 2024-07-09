@@ -30,6 +30,7 @@ bool debug(Solution* s, double** m_costs){
   }else{
     //std::cout << "As FO não batem\n" << "FO REAL: " << FO << "\n" << "FO MODELO: " << s->valueObj << "\n";
     feasible = false;
+    return feasible;
   }
 
   if(s->sequence.back() == 0){
