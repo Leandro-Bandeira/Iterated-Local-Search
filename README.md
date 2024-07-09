@@ -2,6 +2,12 @@
 
 Código responsável pela implementação do algoritmo ILS <br>
 
+Para realizar o código basta executar os seguintes códigos.
+
+```
+make
+./tsp src-new/instances/nome_instancia_desejada
+```
 ### Results obtidos a partir de um processor I7 10 Geração, 15Gb RAM<br>
 
 
