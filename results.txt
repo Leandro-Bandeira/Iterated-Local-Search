@@ -1,4 +1,4 @@
-Resultados TSP
+Resultados TSP (Instancia, FO, time, feasible, 1 = true, 0 = false)
 a280.tsp 2579 38.4819 1
 ali535.tsp 202339 504.167 1
 att48.tsp 10628 0.15991 1
