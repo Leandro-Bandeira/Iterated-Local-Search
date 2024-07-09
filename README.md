@@ -2,11 +2,17 @@
 
 Código responsável pela implementação do algoritmo ILS <br>
 
-Para realizar o código basta executar os seguintes códigos.
+Para realizar o código basta executar os seguintes comandos.
 
 ```
 make
 ./tsp src-new/instances/nome_instancia_desejada
+```
+
+Caso queira executar todas as instances, as informações serão salvas no arquivo results.txt<br>
+```
+chmod a+x execute.sh
+./execute.sh
 ```
 ### Results obtidos a partir de um processor I7 10 Geração, 15Gb RAM<br>
 
