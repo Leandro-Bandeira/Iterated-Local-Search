@@ -10,6 +10,7 @@ make
 ```
 ### Results obtidos a partir de um processor I7 10 Geração, 15Gb RAM<br>
 
+As instâncias que estão em negrito, é porque foi encontrado um valor ótimo melhor que o material de referência. <br>
 
 <table border="1", align="center">
 <thead>
@@ -17,9 +18,9 @@ make
 </thead>
 <tbody>
 <tr><td>a280.tsp</td><td> 2579</td><td> 38.4819</td><td> 1</td></tr>
-<tr><td>ali535.tsp</td><td> 202339</td><td> 504.167</td><td> 1</td></tr>
+<tr><td><b>ali535.tsp</b></td><td> 202339</td><td> 504.167</td><td> 1</td></tr>
 <tr><td>att48.tsp</td><td> 10628</td><td> 0.15991</td><td> 1</td></tr>
-<tr><td>att532.tsp</td><td> 27718</td><td> 466.084</td><td> 1</td></tr>
+<tr><td><b>att532.tsp</b></td><td> 27718</td><td> 466.084</td><td> 1</td></tr>
 <tr><td>bayg29.tsp</td><td> 1610</td><td> 0.0329733</td><td> 1</td></tr>
 <tr><td>bays29.tsp</td><td> 2020</td><td> 0.0329025</td><td> 1</td></tr>
 <tr><td>berlin52.tsp</td><td> 7542</td><td> 0.212121</td><td> 1</td></tr>
@@ -30,14 +31,14 @@ make
 <tr><td>ch130.tsp</td><td> 6110</td><td> 4.35002</td><td> 1</td></tr>
 <tr><td>ch150.tsp</td><td> 6528</td><td> 4.0835</td><td> 1</td></tr>
 <tr><td>d198.tsp</td><td> 15780</td><td> 10.6923</td><td> 1</td></tr>
-<tr><td>d493.tsp</td><td> 35005</td><td> 338.426</td><td> 1</td></tr>
+<tr><td><b>d493.tsp</b></td><td> 35005</td><td> 338.426</td><td> 1</td></tr>
 <tr><td>dantzig42.tsp</td><td> 699</td><td> 0.102968</td><td> 1</td></tr>
 <tr><td>eil101.tsp</td><td> 629</td><td> 1.70647</td><td> 1</td></tr>
 <tr><td>eil51.tsp</td><td> 426</td><td> 0.188876</td><td> 1</td></tr>
 <tr><td>eil76.tsp</td><td> 538</td><td> 0.658271</td><td> 1</td></tr>
 <tr><td>fl417.tsp</td><td> 11861</td><td> 187.56</td><td> 1</td></tr>
 <tr><td>fri26.tsp</td><td> 937</td><td> 0.0274606</td><td> 1</td></tr>
-<tr><td>gil262.tsp</td><td> 2378</td><td> 31.8326</td><td> 1</td></tr>
+<tr><td><b>gil262.tsp</b></td><td> 2378</td><td> 31.8326</td><td> 1</td></tr>
 <tr><td>gr120.tsp</td><td> 6942</td><td> 3.26395</td><td> 1</td></tr>
 <tr><td>gr137.tsp</td><td> 69853</td><td> 4.82262</td><td> 1</td></tr>
 <tr><td>gr17.tsp</td><td> 2085</td><td> 0.00895032</td><td> 1</td></tr>
@@ -72,7 +73,7 @@ make
 <tr><td>pr299.tsp</td><td> 48191</td><td> 52.3924</td><td> 1</td></tr>
 <tr><td>pr439.tsp</td><td> 107217</td><td> 215.27</td><td> 1</td></tr>
 <tr><td>pr76.tsp</td><td> 108159</td><td> 0.698321</td><td> 1</td></tr>
-<tr><td>rat195.tsp</td><td> 2323</td><td> 10.0136</td><td> 1</td></tr>
+<tr><td><b>rat195.tsp</b></td><td> 2323</td><td> 10.0136</td><td> 1</td></tr>
 <tr><td>rat99.tsp</td><td> 1211</td><td> 1.6022</td><td> 1</td></tr>
 <tr><td>rd100.tsp</td><td> 7910</td><td> 1.78623</td><td> 1</td></tr>
 <tr><td>rd400.tsp</td><td> 15287</td><td> 169.363</td><td> 1</td></tr>
