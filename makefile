@@ -15,7 +15,7 @@ CCFLAGS = $(CCOPT)
 #############################
 
 #### diretorios com os source files e com os objs files
-SRCDIR = src-new
+SRCDIR = src
 OBJDIR = obj
 #############################
 

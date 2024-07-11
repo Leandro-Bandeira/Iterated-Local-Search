@@ -1,1 +1,1 @@
-obj/Data.o: src-new/Data.cpp src-new/Data.h
+obj/Data.o: src/Data.cpp src/Data.h

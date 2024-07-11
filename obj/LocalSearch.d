@@ -1,2 +1,1 @@
-obj/LocalSearch.o: src-new/LocalSearch.cpp src-new/LocalSearch.h \
- src-new/Structs.h
+obj/LocalSearch.o: src/LocalSearch.cpp src/LocalSearch.h src/Structs.h

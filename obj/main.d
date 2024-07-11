@@ -1,1 +1,1 @@
-obj/main.o: src-new/main.cpp src-new/Ils.h src-new/Structs.h src-new/Data.h
+obj/main.o: src/main.cpp src/Ils.h src/Structs.h src/Data.h
