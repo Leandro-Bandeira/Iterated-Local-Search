@@ -6,7 +6,7 @@ Para realizar o código basta executar os seguintes comandos.
 
 ```
 make
-./tsp src-new/instances/nome_instancia_desejada
+./tsp src/instances/nome_instancia_desejada
 ```
 
 Caso queira executar todas as instances, as informações serão salvas no arquivo results.txt<br>
