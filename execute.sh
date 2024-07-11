@@ -5,9 +5,9 @@ make
 #Criando a pasta de resultados
 
 cabecalho="Resultados TSP"
-echo $cabecalho > results.txt
+#echo $cabecalho > results.txt
 #Executando as instancias
-PATH_INSTANCES="src-new/instances<=535"
+PATH_INSTANCES="src/instances<=535"
 for file in "$PATH_INSTANCES"/*; 
 do
 
